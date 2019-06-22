@@ -9,6 +9,7 @@
 .flex-div {
     display: flex;
     flex-wrap: wrap;
+
 }
 
 .item-card{
@@ -16,5 +17,10 @@
 }
 
 .height-max{
-    height:90vh;
+    height:850px;
+}
+
+.overflow-div{
+    height:750px;
+    overflow-y: auto;
 }

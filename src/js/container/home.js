@@ -3,71 +3,102 @@ import {Grid} from 'semantic-ui-react';
 import Inventry from './../component/inventry';
 import Portal from './../component/portal';
 import './../../css/home.css';
+import Modal from 'react-responsive-modal';
+import CreateAsset from './../component/createasset';
+import {getAllItems} from './../../apiservices/api';
+import openSocket from 'socket.io-client';
 
 class Home extends React.Component {
 
     state = {
+        open: false,
         allItems: [],
         selectedItems: [],
         buyer: ""
     }
 
-    componentDidMount = () => {
-        this.setState({
-            allItems: [
-                {
-                    itemid: "ASSET1",
-                    name: "watermelon",
-                    weight: 100,
-                    exp: 1234,
-                    mfd: 1234,
-                    isPacket: true,
-                    isGrouped: true
-                }, {
-                    itemid: "ASSET2",
-                    name: "appleseeds",
-                    weight: 50,
-                    exp: 1234,
-                    mfd: 1234,
-                    isPacket: false,
-                    isGrouped: false
+    populateAllItems = ()=>{
+        getAllItems().then((res)=>{
+            let userItemsArray = [];
+            let resarray = res["data"];
+            res["data"].forEach((ele)=>{
+                let obj = {
+                    itemid: ele.itemId,
+                    name: ele.assetMeta.name,
+                    weight: ele.assetMeta.weight,
+                    exp: ele.assetMeta.exp,
+                    mfd: ele.assetMeta.transactTime[0],
+                    isPacket: ele.assetMeta.isPacket,
+                    isGrouped: ele.assetMeta.isGrouped
                 }
-            ],
-            buyer: "mohan@madstreetden.com",
-            selected: ["ASSET1"]
 
+                if(ele.sellers[ele.sellers.length-1].includes(localStorage.getItem("seeduser"))){
+                    console.log("ADDING the ele")
+                    userItemsArray.push(obj);
+                }
+            })
+            this.setState({
+                allItems: userItemsArray,
+                buyer: "mohan@madstreetden.com",
+                selected: ["ASSET1"]
+    
+            })
         })
+    } 
+
+    componentDidMount = () => {
+        var socket = openSocket('http://localhost:5000/');
+        socket.on('connect',()=>{
+            console.log("connected");
+            socket.emit("idInject",localStorage.getItem("seeduser"));
+            socket.on('buyer',(mail)=>{
+                console.log(mail);
+                this.setState({buyer : mail});
+            })
+            socket.on('product',(itemid)=>{
+                console.log(itemid);
+                this.setState({selectedItems:this.state.selectedItems.concat([itemid])});
+                this.populateAllItems();
+            })
+        })
+        this.populateAllItems();
+
     }
 
     //scan handlers
-    startScan = ()=>{
+    startScan = () => {
         console.log("started scanning");
     }
 
-    stopScan = ()=>{
+    stopScan = () => {
         console.log("scanning stoped");
     }
 
-
     //portal btn handlers
-    handleBatch = ()=>{
+    handleBatch = () => {
         console.log("handle batch...")
     }
 
-    handleSell = ()=>{
+    handleSell = () => {
         console.log("handle sell...");
     }
 
-    handleUnbatch = ()=>{
+    handleUnbatch = () => {
         console.log("handle unbatch...")
     }
 
-    confirmHandler = ()=>{
+    confirmHandler = () => {
         console.log("handle confirm...x")
     }
 
+    //handle modal
+    onOpenModal = () => {
+        this.setState({open: true});
+    };
 
-
+    onCloseModal = () => {
+        this.setState({open: false});
+    };
 
     render = () => {
 
@@ -79,14 +110,11 @@ class Home extends React.Component {
             .forEach((ele) => {
                 if (!this.state.selected.includes(ele.itemid)) {
                     unselectedItems.push(ele);
-                }
-                else{
+                } else {
                     selectedItems.push(ele);
                 }
             })
 
-        console.log("selected items:", selectedItems);
-        console.log("all items:", this.state.allItems);
 
         return (
             <div>
@@ -95,26 +123,31 @@ class Home extends React.Component {
                         <Grid.Column width={8}>
                             <div className="main-containers">
                                 <Inventry 
-                                    allItems={unselectedItems}
-                                />
+                                onOpenModal={this.onOpenModal}
+                                allItems={unselectedItems}/>
                             </div>
                         </Grid.Column>
                         <Grid.Column width={8}>
                             <div className="main-containers">
 
-                                <Portal 
+                                <Portal
                                     confirmHandler={this.confirmHandler}
                                     selectedItems={selectedItems}
-                                    startScan = {this.startScan}
-                                    stopScan = {this.stopScan}
+                                    startScan={this.startScan}
+                                    stopScan={this.stopScan}
                                     handleBatch={this.handleBatch}
                                     handleSell={this.handleSell}
-                                    handleUnbatch={this.handleUnbatch}
-                                />
+                                    handleUnbatch={this.handleUnbatch}/>
                             </div>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
+
+                <Modal open={this.state.open} onClose={this.onCloseModal} center>
+                    <h2>Create Asset</h2>
+                    
+                    <CreateAsset populateAllItems={this.populateAllItems} onCloseModal={this.onCloseModal}/>
+                </Modal>
             </div>
         )
     }

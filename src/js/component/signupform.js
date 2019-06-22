@@ -1,5 +1,4 @@
 import React from 'react';
-import { navigate } from '@reach/router';
 import { Form, Button, Checkbox } from 'semantic-ui-react';
 import './../../css/login.css';
 

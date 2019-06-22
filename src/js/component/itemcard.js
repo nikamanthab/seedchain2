@@ -8,6 +8,11 @@ class ItemCard extends React.Component {
         open: false
     };
 
+    handleDate = (date) => {
+        var d = new Date(date);
+        return d.toLocaleTimeString();
+    }
+
     onOpenModal = () => {
         this.setState({open: true});
     };
@@ -89,24 +94,24 @@ class ItemCard extends React.Component {
                                 <span>
                                     <b>Manufacturing Date :
                                     </b>
-                                </span>{this.props.item.mfd}
+                                </span>{this.handleDate(this.props.item.mfd)}
                             </div>
                             <div className="description">
                                 <span>
                                     <b>Expiry Date :
                                     </b>
-                                </span>{this.props.item.exp}
+                                </span>{this.handleDate(this.props.item.mfd)}
                             </div>
                             <div className="description">
                                 <b>
                                     Weight :
                                 </b>{this.props.item.weight}
                             </div>
-                            <div className="description">
+                            {/* <div className="description">
                                 <b>
                                     Price :</b>
                                 {this.props.item.price}
-                            </div>
+                            </div> */}
                         </div>
                     </Modal>
                 </div>

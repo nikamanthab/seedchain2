@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Loader, Grid} from 'semantic-ui-react';
+import {Button, Grid} from 'semantic-ui-react';
 import ItemCard from './../component/itemcard';
 
 class Portal extends React.Component {
@@ -11,7 +11,6 @@ class Portal extends React.Component {
 
     render() {
 
-        console.log(this.props.selectedItems);
         
         let batchbtn = (
             <div></div>
@@ -62,10 +61,9 @@ class Portal extends React.Component {
             .props
             .selectedItems
             .map((i) => {
-                console.log("yoyotokyo")
                 return (
                     <div
-                        className="item-card"
+                        // className="item-card"
                         style={{
                         margin: "10px"
                     }}>
@@ -98,7 +96,7 @@ class Portal extends React.Component {
             content = (
                 <div>
                     <Button primary onClick={this.props.handleConfirm}>Confirm</Button>
-                    <div className="flex-div">
+                    <div className="flex-div overflow-div">
                         {cards}
                     </div>
                 </div>

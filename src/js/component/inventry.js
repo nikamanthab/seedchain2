@@ -1,5 +1,5 @@
 import React from 'react';
-import {Input} from 'semantic-ui-react';
+import {Input, Button} from 'semantic-ui-react';
 import ItemCard from './itemcard';
 
 class Inventry extends React.Component {
@@ -18,11 +18,9 @@ class Inventry extends React.Component {
 
 
         let filteredItems = [];
-        console.log(this.state.search);
 
         if(this.state.search === ""){
             filteredItems = this.props.allItems;
-            console.log(this.props.allItems);
         }
         else{
             this.props.allItems.forEach((ele)=>{
@@ -32,11 +30,18 @@ class Inventry extends React.Component {
             })
         }
 
-        console.log("filtered:",filteredItems);
+        //setting up the create asset btn
+        let createbtn = (<div></div>)
+        if(localStorage.getItem("seeduser") === "gov@gov.com"){
+            createbtn = (
+                <Button color="green" onClick={this.props.onOpenModal}>Create Asset</Button>
+            )
+        }
+
 
         let cards = filteredItems.map((i)=>{
             return(
-            <div className="item-card" style={{margin:"10px"}}>
+            <div  style={{margin:"10px"}}>
                 <ItemCard item={i}/>
             </div>
             )
@@ -45,8 +50,9 @@ class Inventry extends React.Component {
         return (
             <div class="height-max">
                 <h3>Inventry</h3>
+                {createbtn}
                 <Input onChange={this.handleSearchChange} value={this.state.search} placeholder='Search...' />
-                <div className="flex-div">
+                <div className="flex-div overflow-div">
                     {cards}
                 </div>
             </div>
