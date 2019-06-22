@@ -117,7 +117,7 @@ class Home extends React.Component {
 
 
         return (
-            <div>
+            <div style={{backgroundColor:"#50C878"}}>
                 <Grid>
                     <Grid.Row col={2}>
                         <Grid.Column width={8}>

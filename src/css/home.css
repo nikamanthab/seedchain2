@@ -6,6 +6,18 @@
     /* box-shadow: 5px 15px 18px #888888; */
 }
 
+@font-face{
+    src:url("../fonts/LeagueSpartan-Bold.otf");
+    font-family: "League Spartan";
+}
+
+.primaryF{
+    font-family: 'League Spartan';
+    font-size:1.3rem;
+}
+
+
+
 .flex-div {
     display: flex;
     flex-wrap: wrap;
