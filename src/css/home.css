@@ -1,0 +1,20 @@
+.main-containers {
+    padding: 20px;
+    margin: 10px;
+    border-radius: 10px;
+    background-color: rgb(253, 236, 205);
+    /* box-shadow: 5px 15px 18px #888888; */
+}
+
+.flex-div {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.item-card{
+    box-shadow: 5px 5px 5px #888888;
+}
+
+.height-max{
+    height:90vh;
+}
