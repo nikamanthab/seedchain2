@@ -3,6 +3,7 @@ import {Grid} from 'semantic-ui-react';
 import {navigate} from '@reach/router';
 import Signupform from '../component/signupform';
 import './../../css/login.css';
+import Logo from '../../images/fertilizer.png';
 import {setUser, getuser, getUser, generateUserQr} from './../../apiservices/api';
 
 class Login extends React.Component {
@@ -46,12 +47,18 @@ class Login extends React.Component {
 
     render() {
         return (
-            <div className="padding">
-                <Grid>
+            <div className="padding" style={{backgroundColor:'#50C878'}}>
+                <div className="primaryF content extra" style={{color:'white',textAlign:'center'}}>
+                    <img style={{width:'40px'}} src={Logo}></img> 
+                    <a style={{color:'white',paddingBottom : '10px'}}>  SeedChain</a>
+                </div>
+                <Grid style={{backgroundColor:"#50C878", borderRadius: '10px', padding : '10px'}}>
                     <Grid.Row col={2}>
                         <Grid.Column width={8}>
-                            <div className="gray-background box-shadow padding2">
-                                <h3>Signup</h3>
+                            <div className="gray-background"
+                            style={{borderRadius:'10px', margin : '20px'}}
+                            >
+                                <h2 style={{marginTop:'10px'}}>Signup</h2>
                                 <Signupform
                                     type="register"
                                     submitform={this.signup}
@@ -59,7 +66,8 @@ class Login extends React.Component {
                             </div>
                         </Grid.Column>
                         <Grid.Column width={8}>
-                            <div className="gray-background box-shadow padding2">
+                            <div className="gray-background"
+                            style={{borderRadius: '10px', padding : '10px',marginTop : '20px'}}>
                                 <h3>LogIn</h3>
                                 <Signupform
                                     type="login"

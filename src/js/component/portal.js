@@ -30,11 +30,11 @@ class Portal extends React.Component {
         )
         if (this.props.selectedItems.length > 1) {
             batchbtn = (
-                <Button color="yellow" onClick={this.props.handleBatch}>Batch</Button>
+                <Button className="primaryF" color="yellow" onClick={this.props.handleBatch}>Batch</Button>
             )
         } else {
             batchbtn = (
-                <Button color="yellow" disabled>Batch</Button>
+                <Button className="primaryF" color="yellow" disabled>Batch</Button>
             )
         }
 
@@ -44,11 +44,11 @@ class Portal extends React.Component {
         )
         if (this.props.selectedItems.length >= 1) {
             sellbtn = (
-                <Button color="green" onClick={this.props.handleSell}>Sell</Button>
+                <Button className="primaryF" color="green" onClick={this.props.handleSell}>Sell</Button>
             )
         } else {
             sellbtn = (
-                <Button color="green" disabled>Sell</Button>
+                <Button className="primaryF" color="green" disabled>Sell</Button>
             )
         }
 
@@ -58,11 +58,11 @@ class Portal extends React.Component {
         )
         if (this.props.selectedItems.length === 1) {
             unbatchbtn = (
-                <Button color="red" onClick={this.props.handleUnbatch}>Unbatch</Button>
+                <Button className="primaryF" color="red" onClick={this.props.handleUnbatch}>Unbatch</Button>
             )
         } else {
             unbatchbtn = (
-                <Button color="red" disabled>Unbatch</Button>
+                <Button className="primaryF" color="red" disabled>Unbatch</Button>
             )
         }
 
@@ -108,7 +108,7 @@ class Portal extends React.Component {
         } else {
             content = (
                 <div>
-                    <Button primary onClick={this.props.handleConfirm}>Confirm</Button>
+                    <Button className="primaryF" primary onClick={this.props.handleConfirm}>Confirm</Button>
                     <div className="flex-div overflow-div">
                         {cards}
                     </div>
@@ -118,7 +118,7 @@ class Portal extends React.Component {
 
         return (
             <div className="height-max">
-                <h3>Portal</h3>
+                <h3 className="primaryF">Portal</h3>
                 {content}
 
                 <Modal open={this.state.open} onClose={this.onCloseModal} center>
