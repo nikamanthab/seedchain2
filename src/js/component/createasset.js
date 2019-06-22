@@ -7,7 +7,8 @@ class CreateAsset extends React.Component {
         name: "",
         count: "",
         weight: 0,
-        exp:0
+        exp:0,
+        price:0
     }
 
     handleInputChange = (e) => {
@@ -20,6 +21,9 @@ class CreateAsset extends React.Component {
         }
         else if(e.target.id === "exp"){
             this.setState({exp:e.target.value})
+        }
+        else if(e.target.id === "price"){
+            this.setState({price:e.target.value})
         }
     }
 
@@ -36,6 +40,7 @@ class CreateAsset extends React.Component {
             res.data.files.forEach(x=>{
                 window.open("http://localhost:5000/qr/temp/"+x,x);
             })
+            console.log("lvl1")
             return "ok";
         }).then(() => {
             let req = {
@@ -47,17 +52,20 @@ class CreateAsset extends React.Component {
                     weight: this.state.weight,
                     transactTime: [],
                     exp: Date.parse(this.state.exp),
+                    price:this.state.price,
                     isPacket: "true",
                     isGrouped: "false"
                 }
             };
+            console.log("lvl2");
             return generateItems(req)
         })
         .then((res)=>{
+            console.log("lvl3");
             this.props.populateAllItems();
             this.props.onCloseModal();
         })
-        .catch(err=>console.log(err));
+        .catch(err=>console.log("lvl4",err));
     }
 
     render = () => {
@@ -95,6 +103,14 @@ class CreateAsset extends React.Component {
                             id="exp"
                             onChange={this.handleInputChange}
                             value={this.state.exp}/>
+                    </Form.Field>
+                    <Form.Field>
+                        <label>Price:</label>
+                        <Input
+                            type="string"
+                            id="price"
+                            onChange={this.handleInputChange}
+                            value={this.state.price}/>
                     </Form.Field>
                     <Button onClick={this.handleSubmit}>Submit</Button>
                 </Form>

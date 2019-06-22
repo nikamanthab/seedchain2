@@ -107,11 +107,11 @@ class ItemCard extends React.Component {
                                     Weight :
                                 </b>{this.props.item.weight}
                             </div>
-                            {/* <div className="description">
+                            <div className="description">
                                 <b>
                                     Price :</b>
                                 {this.props.item.price}
-                            </div> */}
+                            </div>
                         </div>
                     </Modal>
                 </div>

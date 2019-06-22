@@ -5,8 +5,9 @@ import Portal from './../component/portal';
 import './../../css/home.css';
 import Modal from 'react-responsive-modal';
 import CreateAsset from './../component/createasset';
-import {getAllItems} from './../../apiservices/api';
+import {getAllItems, sellItem, batchItems} from './../../apiservices/api';
 import openSocket from 'socket.io-client';
+import {Input} from 'semantic-ui-react';
 
 class Home extends React.Component {
 
@@ -14,7 +15,9 @@ class Home extends React.Component {
         open: false,
         allItems: [],
         selectedItems: [],
-        buyer: ""
+        buyer: "",
+        batchmodal: false,
+        batchname:""
     }
 
     populateAllItems = ()=>{
@@ -38,16 +41,13 @@ class Home extends React.Component {
                 }
             })
             this.setState({
-                allItems: userItemsArray,
-                buyer: "mohan@madstreetden.com",
-                selected: ["ASSET1"]
-    
+                allItems: userItemsArray    
             })
         })
     } 
 
     componentDidMount = () => {
-        var socket = openSocket('http://localhost:5000/');
+        var socket = openSocket('http://192.168.137.97:5000/');
         socket.on('connect',()=>{
             console.log("connected");
             socket.emit("idInject",localStorage.getItem("seeduser"));
@@ -57,8 +57,37 @@ class Home extends React.Component {
             })
             socket.on('product',(itemid)=>{
                 console.log(itemid);
-                this.setState({selectedItems:this.state.selectedItems.concat([itemid])});
-                this.populateAllItems();
+                let selectedItems = [];
+                let unselectedItems = [];
+                this
+            .state
+            .allItems
+            .forEach((ele) => {
+                if (!this.state.selectedItems.includes(ele.itemid)) {
+                    unselectedItems.push(ele);
+                } else {
+                    selectedItems.push(ele);
+                }
+            })
+
+            console.log(selectedItems);
+            console.log(unselectedItems);
+
+            let keys = [];
+            unselectedItems.forEach((unsel)=>{
+                if(unsel.itemid === itemid){
+                    keys.push(itemid);
+                }
+            })
+
+            console.log(keys);
+            if(keys.length === 0){
+                alert("item not available")
+            }
+            else{
+                    console.log("inside else")
+                    this.setState({selectedItems:this.state.selectedItems.concat(keys)});
+                }
             })
         })
         this.populateAllItems();
@@ -75,12 +104,54 @@ class Home extends React.Component {
     }
 
     //portal btn handlers
+    handleBatchNameChange = (e)=>{
+        this.setState({
+            batchname:e.target.value
+        })
+    }
+
+    batchModalClose = ()=>{
+        this.setState({
+            batchmode: false
+        })
+    }
+
+    openBatchSelect = ()=>{
+        this.setState({
+            batchmodal: true
+        })
+    }
+
     handleBatch = () => {
+        this.openBatchSelect()
         console.log("handle batch...")
+        let obj = {
+            $class: "org.seedchain.resources.BatchingBox",
+            owner: localStorage.getItem("seeduser"),
+            items: this.state.selectedItems,
+            name: this.state.batchname,
+          }
+        batchItems(obj).then(()=>{
+            console.log("boom")
+            this.populateAllItems();
+        })
     }
 
     handleSell = () => {
         console.log("handle sell...");
+        let promises = [];
+        this.state.selectedItems.forEach((sel,i)=>{
+            promises.push(sellItem({
+                $class: "org.seedchain.resources.Sell",
+                buyer: this.state.buyer,
+                item: sel,
+              }))
+        })
+        Promise.all(promises).then((res)=>{
+            console.log("sold all...")
+            this.populateAllItems();
+        })
+
     }
 
     handleUnbatch = () => {
@@ -88,7 +159,7 @@ class Home extends React.Component {
     }
 
     confirmHandler = () => {
-        console.log("handle confirm...x")
+        console.log("handle confirm...")
     }
 
     //handle modal
@@ -108,7 +179,7 @@ class Home extends React.Component {
             .state
             .allItems
             .forEach((ele) => {
-                if (!this.state.selected.includes(ele.itemid)) {
+                if (!this.state.selectedItems.includes(ele.itemid)) {
                     unselectedItems.push(ele);
                 } else {
                     selectedItems.push(ele);
@@ -147,6 +218,10 @@ class Home extends React.Component {
                     <h2>Create Asset</h2>
                     
                     <CreateAsset populateAllItems={this.populateAllItems} onCloseModal={this.onCloseModal}/>
+                </Modal>
+
+                <Modal open={this.state.batchmodal} onClose={this.batchModalClose} center>
+                    <Input type="text" value={this.state.batchname} onChange={this.handleBatchNameChange}/>
                 </Modal>
             </div>
         )

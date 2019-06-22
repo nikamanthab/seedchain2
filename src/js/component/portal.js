@@ -1,13 +1,26 @@
 import React from 'react';
-import {Button, Grid} from 'semantic-ui-react';
+import {Button, Grid, Form} from 'semantic-ui-react';
 import ItemCard from './../component/itemcard';
+import Modal from 'react-responsive-modal';
+
 
 class Portal extends React.Component {
 
     state = {
+        open: false,
         started: false,
         isSeller: true
     }
+
+
+    //modal handlers
+    onOpenModal = () => {
+        this.setState({ open: true });
+      };
+     
+      onCloseModal = () => {
+        this.setState({ open: false });
+      };
 
     render() {
 
@@ -107,6 +120,13 @@ class Portal extends React.Component {
             <div className="height-max">
                 <h3>Portal</h3>
                 {content}
+
+                <Modal open={this.state.open} onClose={this.onCloseModal} center>
+                    <Form>
+                        <Form.Field></Form.Field>
+                    </Form>
+                </Modal>
+                
             </div>
         )
     }
