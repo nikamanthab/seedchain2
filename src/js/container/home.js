@@ -65,10 +65,16 @@ class Home extends React.Component {
             .state
             .allItems
             .forEach((ele) => {
-                if (!this.state.selectedItems.includes(ele.itemid)) {
-                    unselectedItems.push(ele);
-                } else {
-                    selectedItems.push(ele);
+                if ((!this.state.selectedItems.includes(ele.itemid)) && ele.isGrouped===false) {
+                    if(ele.isPacket === false && ele.children.length!==0)
+                        unselectedItems.push(ele);
+                    else if(ele.isPacket === true)
+                        unselectedItems.push(ele);
+                } else if(this.state.selectedItems.includes(ele.itemid) && ele.isGrouped===false) {  
+                    if(ele.isPacket === false && ele.children.length!==0)  
+                        selectedItems.push(ele);
+                    else if(ele.isPacket === true)
+                        selectedItems.push(ele);
                 }
             })
 
@@ -191,7 +197,7 @@ class Home extends React.Component {
             .state
             .allItems
             .forEach((ele) => {
-                if (!this.state.selectedItems.includes(ele.itemid) && ele.isGrouped===false) {
+                if ((!this.state.selectedItems.includes(ele.itemid)) && ele.isGrouped===false) {
                     if(ele.isPacket === false && ele.children.length!==0)
                         unselectedItems.push(ele);
                     else if(ele.isPacket === true)
@@ -200,7 +206,7 @@ class Home extends React.Component {
                     if(ele.isPacket === false && ele.children.length!==0)  
                         selectedItems.push(ele);
                     else if(ele.isPacket === true)
-                        unselectedItems.push(ele);
+                        selectedItems.push(ele);
                 }
             })
 

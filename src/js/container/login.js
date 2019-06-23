@@ -5,14 +5,32 @@ import Signupform from '../component/signupform';
 import './../../css/login.css';
 import Logo from '../../images/fertilizer.png';
 import {setUser, getuser, getUser, generateUserQr} from './../../apiservices/api';
+import Modal from 'react-responsive-modal';
+import {Loader} from 'semantic-ui-react';
 
 class Login extends React.Component {
 
+    state = {
+        open: false,
+      };
+     
+      onOpenModal = () => {
+        this.setState({ open: true });
+      };
+     
+      onCloseModal = () => {
+        this.setState({ open: false });
+      };
+
     signup = (email, password, phone, isFarmer) => {
+        this.onOpenModal();
         console.log("inside signup");
         //signup - server request
         generateUserQr({email:email})
         .then((res)=>{
+            alert(res.data);
+
+            this.onCloseModal();
             let obj = {
                 $class: "org.seedchain.resources.Seller",
                 email: email,
@@ -28,7 +46,7 @@ class Login extends React.Component {
         ).then((res)=>{
             console.log(res);
             localStorage.setItem("seeduser", email);
-            // navigate("/home")
+            navigate("/home")
           })
     }
 
@@ -77,6 +95,14 @@ class Login extends React.Component {
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
+
+                <Modal open={this.state.open} onClose={this.onCloseModal} center>
+                    <div style={{padding:"50px"}}>
+                        <Loader active inline />
+                    </div>
+                </Modal>
+                
+
             </div>
         )
     }
