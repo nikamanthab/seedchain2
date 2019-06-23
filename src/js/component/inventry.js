@@ -41,7 +41,7 @@ class Inventry extends React.Component {
 
         let cards = filteredItems.map((i)=>{
             return(
-            <div className="" style={{margin:"10px"}}>
+            <div className="primaryF" style={{margin:"10px"}}>
                 <ItemCard item={i}/>
             </div>
             )
