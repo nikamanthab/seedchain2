@@ -10,7 +10,7 @@ class ItemCard extends React.Component {
 
     handleDate = (date) => {
         var d = new Date(date);
-        return d.toLocaleTimeString();
+        return d.toLocaleDateString();
     }
 
     onOpenModal = () => {
@@ -37,11 +37,11 @@ class ItemCard extends React.Component {
                 style={{
                 textAlign: 'center'
             }}>
-                <div className="header">
+                <div className="header primaryF" style={{marginTop:'10px'}}>
                     <strong>{this.props.item.itemid}</strong>
                 </div>
-                <div className="description">
-                    <strong>{this.props.item.name}</strong>
+                <div className="" style={{padding:'5px'}}>
+                    {this.props.item.name}
                 </div>
                 <div
                     className="content extra"

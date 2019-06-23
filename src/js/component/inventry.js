@@ -34,14 +34,14 @@ class Inventry extends React.Component {
         let createbtn = (<div></div>)
         if(localStorage.getItem("seeduser") === "gov@gov.com"){
             createbtn = (
-                <Button color="green" onClick={this.props.onOpenModal}>Create Asset</Button>
+                <Button className="primaryF" color="green" onClick={this.props.onOpenModal}>Create Asset</Button>
             )
         }
 
 
         let cards = filteredItems.map((i)=>{
             return(
-            <div  style={{margin:"10px"}}>
+            <div className="" style={{margin:"10px"}}>
                 <ItemCard item={i}/>
             </div>
             )
@@ -49,7 +49,7 @@ class Inventry extends React.Component {
         
         return (
             <div class="height-max">
-                <h3>Inventry</h3>
+                <h3 className="primaryF">Inventory</h3>
                 {createbtn}
                 <Input onChange={this.handleSearchChange} value={this.state.search} placeholder='Search...' />
                 <div className="flex-div overflow-div">

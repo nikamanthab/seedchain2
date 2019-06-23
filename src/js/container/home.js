@@ -5,9 +5,9 @@ import Portal from './../component/portal';
 import './../../css/home.css';
 import Modal from 'react-responsive-modal';
 import CreateAsset from './../component/createasset';
-import {getAllItems, sellItem, batchItems} from './../../apiservices/api';
+import {getAllItems, sellItem, batchItems, unBatch} from './../../apiservices/api';
 import openSocket from 'socket.io-client';
-import {Input} from 'semantic-ui-react';
+import {Input, Button} from 'semantic-ui-react';
 
 class Home extends React.Component {
 
@@ -15,7 +15,7 @@ class Home extends React.Component {
         open: false,
         allItems: [],
         selectedItems: [],
-        buyer: "",
+        buyer: "n@n.com",
         batchmodal: false,
         batchname:""
     }
@@ -32,8 +32,10 @@ class Home extends React.Component {
                     exp: ele.assetMeta.exp,
                     mfd: ele.assetMeta.transactTime[0],
                     isPacket: ele.assetMeta.isPacket,
-                    isGrouped: ele.assetMeta.isGrouped
+                    isGrouped: ele.assetMeta.isGrouped,
+                    children: ele.children
                 }
+                console.log("important",obj)
 
                 if(ele.sellers[ele.sellers.length-1].includes(localStorage.getItem("seeduser"))){
                     console.log("ADDING the ele")
@@ -118,12 +120,12 @@ class Home extends React.Component {
 
     openBatchSelect = ()=>{
         this.setState({
-            batchmodal: true
+            batchmode: true
         })
     }
 
     handleBatch = () => {
-        this.openBatchSelect()
+        
         console.log("handle batch...")
         let obj = {
             $class: "org.seedchain.resources.BatchingBox",
@@ -131,6 +133,8 @@ class Home extends React.Component {
             items: this.state.selectedItems,
             name: this.state.batchname,
           }
+
+          console.log(obj);
         batchItems(obj).then(()=>{
             console.log("boom")
             this.populateAllItems();
@@ -156,6 +160,14 @@ class Home extends React.Component {
 
     handleUnbatch = () => {
         console.log("handle unbatch...")
+        let obj = {
+            $class: "org.seedchain.resources.Unwrap",
+            item: this.state.selectedItems[0],
+          }
+        unBatch(obj).then((res)=>{
+            this.populateAllItems();
+        })
+
     }
 
     confirmHandler = () => {
@@ -179,16 +191,22 @@ class Home extends React.Component {
             .state
             .allItems
             .forEach((ele) => {
-                if (!this.state.selectedItems.includes(ele.itemid)) {
-                    unselectedItems.push(ele);
-                } else {
-                    selectedItems.push(ele);
+                if (!this.state.selectedItems.includes(ele.itemid) && ele.isGrouped===false) {
+                    if(ele.isPacket === false && ele.children.length!==0)
+                        unselectedItems.push(ele);
+                    else if(ele.isPacket === true)
+                        unselectedItems.push(ele);
+                } else if(this.state.selectedItems.includes(ele.itemid) && ele.isGrouped===false) {  
+                    if(ele.isPacket === false && ele.children.length!==0)  
+                        selectedItems.push(ele);
+                    else if(ele.isPacket === true)
+                        unselectedItems.push(ele);
                 }
             })
 
 
         return (
-            <div>
+            <div style={{backgroundColor:"#50C878"}}>
                 <Grid>
                     <Grid.Row col={2}>
                         <Grid.Column width={8}>
@@ -206,7 +224,7 @@ class Home extends React.Component {
                                     selectedItems={selectedItems}
                                     startScan={this.startScan}
                                     stopScan={this.stopScan}
-                                    handleBatch={this.handleBatch}
+                                    handleBatch={this.openBatchSelect}
                                     handleSell={this.handleSell}
                                     handleUnbatch={this.handleUnbatch}/>
                             </div>
@@ -220,8 +238,9 @@ class Home extends React.Component {
                     <CreateAsset populateAllItems={this.populateAllItems} onCloseModal={this.onCloseModal}/>
                 </Modal>
 
-                <Modal open={this.state.batchmodal} onClose={this.batchModalClose} center>
+                <Modal open={this.state.batchmode} onClose={this.batchModalClose} center>
                     <Input type="text" value={this.state.batchname} onChange={this.handleBatchNameChange}/>
+                    <Button onClick={this.handleBatch}>Submit</Button>
                 </Modal>
             </div>
         )

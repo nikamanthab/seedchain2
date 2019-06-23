@@ -52,7 +52,7 @@ class CreateAsset extends React.Component {
                     weight: this.state.weight,
                     transactTime: [],
                     exp: Date.parse(this.state.exp),
-                    price:this.state.price,
+                    price:parseInt(this.state.price),
                     isPacket: "true",
                     isGrouped: "false"
                 }

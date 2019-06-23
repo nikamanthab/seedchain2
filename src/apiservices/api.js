@@ -22,11 +22,14 @@ const generateQr = (params)=>
   axios.post('http://192.168.137.97:5000/generateQr',params)
 
 const sellItem = (params)=>
-  axios.post(URL + '/Sell',params)
+  axios.post(URL + 'Sell',params)
 
 const batchItems = (params)=>
-  axios.post(URL + '/BatchingBox',params)
+  axios.post(URL + 'BatchingBox',params)
+
+const unBatch = (params)=>
+  axios.post(URL + 'Unwrap',params)
 
 export {
-    setUser,getUser,getAllItems, generateItems, generateUserQr, generateQr, sellItem, batchItems
+    setUser,getUser,getAllItems, generateItems, generateUserQr, generateQr, sellItem, batchItems, unBatch
 }
