@@ -58,7 +58,7 @@ class Login extends React.Component {
                             <div className="gray-background"
                             style={{borderRadius:'10px', margin : '20px'}}
                             >
-                                <h2 style={{marginTop:'10px'}}>Signup</h2>
+                                <h3 className="primaryF" style={{marginTop : '20px',padding:'10px'}}>Signup</h3>
                                 <Signupform
                                     type="register"
                                     submitform={this.signup}
@@ -67,8 +67,8 @@ class Login extends React.Component {
                         </Grid.Column>
                         <Grid.Column width={8}>
                             <div className="gray-background"
-                            style={{borderRadius: '10px', padding : '10px',marginTop : '20px'}}>
-                                <h3>LogIn</h3>
+                            style={{borderRadius: '10px', padding : '10px',marginTop : '20px',height:'380px'}}>
+                                <h3 className="primaryF" style={{marginRight:'10px',marginTop : '80px'}}>Login</h3>
                                 <Signupform
                                     type="login"
                                     submitform={this.login}

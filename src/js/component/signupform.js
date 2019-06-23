@@ -115,7 +115,7 @@ class Signupform extends React.Component {
                             style={{
                             textAlign: 'center'
                         }}>
-                            <label className="ui label small grey">isFarmer</label>
+                            <label className="ui label small grey">Farmer</label>
                             <div className="padding2">
                                 <Checkbox
                                     id="isFarmer"
@@ -175,8 +175,8 @@ class Signupform extends React.Component {
                             onClick={this.handleSubmit}
                             type='submit'
                             style={{
-                            marginLeft: "160px",
-                            marginBottom: '30px'
+                            marginLeft: "170px",
+                            marginTop:'50'
                         }}>Submit</Button>
                     </Form.Field>
                 </div>
